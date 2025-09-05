@@ -1,8 +1,8 @@
-# **NetworkLLM: Intent-Aware Intrusion Detection Using Large Language Models Grounded in Protocol Semantics**
+## **NetworkLLM: Intent-Aware Intrusion Detection Using Large Language Models Grounded in Protocol Semantics**
 
 ## **Abstract**
 
-Traditional intrusion detection systems (IDS) like Snort and Suricata rely on signature-based or statistical anomaly detection, often failing to interpret the **semantic intent** behind network traffic. As adversaries exploit legitimate protocols in novel ways—for instance, through DNS tunneling or TLS padding exploits—these systems struggle to detect sophisticated attacks or explain their malicious purpose. **NetworkLLM introduces a novel framework that treats network protocols as a structured "language," with its own grammar (protocol specifications) and content (field semantics).** It leverages **Large Language Models (LLMs)** to translate this "network language" into human-readable intent narratives (e.g., "this packet is probing a server"). Unlike existing LLM-based IDS approaches that focus on anomaly detection or protocol parsing [1, 2, 3], NetworkLLM combines **field-aware tokenization**, **RFC-grounded Retrieval-Augmented Generation (RAG)**, and **LLM-guided fuzzing** to infer fine-grained intent classes (e.g., benign handshake, probe, exfiltration) and map them to adversarial tactics (e.g., MITRE ATT&CK). This enables an **explainable, intent-aware IDS** that not only identifies suspicious packets but also articulates their purpose, significantly enhancing Security Operations Center (SOC) efficiency and trust.
+Traditional intrusion detection systems (IDS), such as Snort and Suricata, rely on signature-based or statistical anomaly detection, often failing to interpret the **semantic intent** behind network traffic. As adversaries exploit legitimate protocols in novel ways—for instance, through DNS tunneling or TLS padding exploits—these systems struggle to detect sophisticated attacks or explain their malicious purpose. **NetworkLLM introduces a novel framework that treats network protocols as a structured "language," with its own grammar (protocol specifications) and content (field semantics).** It leverages **Large Language Models (LLMs)** to translate this "network language" into human-readable intent narratives (e.g., "this packet is probing a server"). Unlike existing LLM-based IDS approaches that focus on anomaly detection or protocol parsing [1, 2, 3], NetworkLLM combines **field-aware tokenization**, **RFC-grounded Retrieval-Augmented Generation (RAG)**, and **LLM-guided fuzzing** to infer fine-grained intent classes (e.g., benign handshake, probe, exfiltration) and map them to adversarial tactics (e.g., MITRE ATT&CK). This enables an **explainable, intent-aware IDS** that not only identifies suspicious packets but also articulates their purpose, significantly enhancing Security Operations Center (SOC) efficiency and trust.
 
 ---
 
@@ -28,11 +28,11 @@ This project pioneers a paradigm shift toward an **intent-aware, explainable IDS
 ---
 
 ## **Research Questions**
-1.  How can network protocols be tokenized as a “language” to capture both syntactic structure (protocol grammar) and semantic content (field intent) for LLM processing?
-2.  Can LLMs reliably classify fine-grained intent classes (e.g., benign handshake, probe, exploit, exfiltration, C2) and translate them into human-readable narratives?
-3.  How does RFC-grounded RAG improve the accuracy and explainability of intent inference while mitigating LLM hallucinations?
-4.  Can LLM-guided fuzzing autonomously explore protocol misuse scenarios to discover novel attack intents and enhance adversarial training?
-5.  How do narrative intent explanations impact SOC analysts’ efficiency, false positive reduction, and trust in automated IDS alerts?
+1. How can network protocols be tokenized as a “language” to capture both syntactic structure (protocol grammar) and semantic content (field intent) for LLM processing?
+2. Can LLMs reliably classify fine-grained intent classes (e.g., benign handshake, probe, exploit, exfiltration, C2) and translate them into human-readable narratives?
+3. How does RFC-grounded RAG improve the accuracy and explainability of intent inference while mitigating LLM hallucinations?
+4. Can LLM-guided fuzzing autonomously explore protocol misuse scenarios to discover novel attack intents and enhance adversarial training?
+5. How do narrative intent explanations impact SOC analysts’ efficiency, false positive reduction, and trust in automated IDS alerts?
 
 ---
 
@@ -42,6 +42,7 @@ This project pioneers a paradigm shift toward an **intent-aware, explainable IDS
 * Integrate **RFC-based RAG** with finite state machine (FSM) validation to ground intent inferences in protocol semantics, ensuring accurate and explainable outputs.
 * Implement **self-supervised anomaly models** for zero-day intent discovery, translating anomalous patterns into narrative descriptions.
 * Adapt **LLM-guided fuzzing** to generate adversarial training data by exploring protocol misuse scenarios.
+* **Integrate NetworkLLM into a tiered defense architecture**, placing it after traditional filtering stages (e.g., firewall, signature-based IDS) to reduce the computational burden.
 * Integrate into **SOC pipelines** (e.g., Elastic, Wazuh) and evaluate narrative outputs for analyst efficiency and trust.
 
 ---
@@ -76,7 +77,7 @@ A **self-supervised anomaly detector** (e.g., contrastive learning or autoencode
 ### **Risks and Mitigations**
 | Risk | Mitigation |
 | :--- | :--- |
-| **Computational Cost** | **Two-tier pipeline:** Lightweight DistilBERT for initial classification, escalating to T5-small for narrative generation. Quantization and batch processing on GPUs will target <1s per packet latency [6]. |
+| **Computational Cost** | **Tiered defense architecture:** NetworkLLM will be deployed after traditional filtering stages (e.g., firewall, signature-based IDS, BenignIDS) to reduce the volume of traffic requiring advanced analysis. This ensures that the LLM only processes traffic that has bypassed initial defenses [4]. |
 | **Hallucination** | **Schema-constrained outputs** requiring RFC citations; FSM validation ensures protocol compliance [2, 4]. |
 | **Prompt Injection** | **No free-form prompts**; allow-list RAG sources (e.g., RFCs) and sanitize inputs via anomaly checks [6, 16]. |
 | **Adversarial Traffic** | **Adversarial training** with fuzzed and red-teamed samples; include poisoned data to counter evasion [5, 16]. |
@@ -90,12 +91,12 @@ The operational impact will be quantified through a phased evaluation:
 ---
 
 ## **Work Packages (36 Months)**
-1.  **Representation Learning (Months 1–6):** Develop a tokenizer for protocol semantics, ablating against TF-IDF [4, 6].
-2.  **Intent Inference (Months 6–12):** Fine-tune LLMs for intent classification and narrative generation [1].
-3.  **Grounded Explainability (Months 12–18):** Build the RFC-RAG system with FSM validation [2].
-4.  **Zero-Day Detection (Months 18–24):** Develop self-supervised models for novel intent discovery [3].
-5.  **Exploration & Robustness (Months 24–30):** Adapt LLM-guided fuzzing for protocol misuse discovery [5].
-6.  **Operational Deployment (Months 30–36):** Integrate into SOC tools and evaluate narrative outputs with analysts [4].
+1. **Representation Learning (Months 1–6):** Develop a tokenizer for protocol semantics, ablating against TF-IDF [4, 6].
+2. **Intent Inference (Months 6–12):** Fine-tune LLMs for intent classification and narrative generation [1].
+3. **Grounded Explainability (Months 12–18):** Build the RFC-RAG system with FSM validation [2].
+4. **Zero-Day Detection (Months 18–24):** Develop self-supervised models for novel intent discovery [3].
+5. **Exploration & Robustness (Months 24–30):** Adapt LLM-guided fuzzing for protocol misuse discovery [5].
+6. **Operational Deployment (Months 30–36):** Integrate into a tiered defense architecture and SOC tools, evaluating narrative outputs with analysts [4].
 
 ---
 
@@ -112,7 +113,7 @@ The operational impact will be quantified through a phased evaluation:
 * A **field-aware tokenization method** optimized for protocol semantics, advancing beyond TF-IDF approaches [4].
 * An **RFC-grounded RAG system** with FSM validation, reducing hallucinations [1].
 * An **LLM-guided fuzzing methodology** for discovering protocol misuse intents, distinct from bug-focused fuzzing [5].
-* A **deployment-ready SOC prototype** with narrative alerts, improving on binary classification systems [4].
+* A **deployment-ready SOC prototype** within a tiered defense architecture, improving on binary classification systems [4].
 * A **theoretical framework** for defining network intent as a translatable language, bridging NLP and cybersecurity.
 
 ---
@@ -120,7 +121,7 @@ The operational impact will be quantified through a phased evaluation:
 ## **Timeline (36 Months)**
 * **Year 1:** Develop the tokenization framework, establish baselines, and train the initial LLM classifier.
 * **Year 2:** Implement RFC-RAG grounding, self-supervised anomaly detection with narrative translation, and the fuzzing harness.
-* **Year 3:** Integrate into SOC tools, evaluate narrative outputs with analysts, and complete the thesis.
+* **Year 3:** Integrate into SOC tools within a tiered defense architecture, evaluate narrative outputs with analysts, and complete the thesis.
 
 ---
 
@@ -132,6 +133,7 @@ The operational impact will be quantified through a phased evaluation:
 ---
 
 ## **References**
+(The references remain the same as provided.)
 1. TrafficLLM: Domain-Specific Tokenization for Network Traffic Analysis, arXiv, 2025.
 2. PROSPER: Extracting Protocol State Machines from RFCs, HotNets, 2023.
 3. LLMcap: Self-Supervised Anomaly Detection in PCAPs, 2024.
