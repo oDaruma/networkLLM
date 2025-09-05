@@ -1,0 +1,27 @@
+# Core
+pandas>=2.2
+numpy>=2.0
+scikit-learn>=1.5
+lightgbm>=4.5
+xgboost>=2.0
+scipy>=1.12
+pyarrow>=16.0
+
+# NLP / LLM (local small models)
+transformers>=4.44
+tokenizers>=0.15
+accelerate>=0.33
+# CPU/GPU variants (basic pins; refine in your env)
+torch>=2.3
+
+# Retrieval & eval
+faiss-cpu>=1.8
+tqdm>=4.66
+rich>=13.7
+pydantic>=2.8
+typer>=0.12
+ujson>=5.10
+
+# Protocol tooling (optional)
+pyshark>=0.6
+scapy>=2.5
