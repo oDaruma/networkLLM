@@ -1,5 +1,7 @@
 # Human Communication vs Network Communication
 
+<img width="3600" height="402" alt="image" src="https://github.com/user-attachments/assets/ad8a0a18-bcfa-449e-98ad-fa9fd5d0f3e0" />
+
 | Human Communication Element            | Network Equivalent                                     | Explanation / Analogy                                                                        |
 | -------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | **Speaker**                            | **Source host (client/server)**                        | The originator of a message (e.g., a person speaking vs. a device initiating communication). |
