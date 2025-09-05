@@ -43,3 +43,33 @@ networkLLM_full/
 5. LLM intent: `python examples/run_llm_intent.py`
 
 **Conventions (Imperial naming):** `X_train/y_train`, `X_val/y_val`, `X_test/y_test`; `feature_names`, `cat_cols`, `num_cols`; `baseline_model`, `bayes`; `RANDOM_STATE`, `DATA_PATH`, `TARGET_COL`, `stage_root`.
+
+---
+
+## Other related researchs
+
+| Paper / Project                                      | Dataset(s) Used                               | Method                                             | Key Results                                                      | Implications for **networkLLM**                                                                                       |
+| ---------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **LLM-Guided Protocol Fuzzing (ChatAFL, NDSS 2024)** | Real protocol parsers (e.g., FTP, SMTP, HTTP) | LLM extracts grammar + generates seeds for fuzzing | Higher **coverage**, new states found, escaped coverage plateaus | Use LLMs not just for detection, but for **hard-negative generation** (augment training with fuzzed malicious seeds). |
+| **PROSPER (HotNets 2023)**                           | RFCs (TLS, DNS, HTTP)                         | LLM extracts FSMs from specs                       | Accurate state machines built from RFC text                      | Ground intent detection in **RFC-derived state transitions**; enables “violates RFC section X” explanations.          |
+| **Packet Field Tree (ACM 2024)**                     | Open traces + crafted protocols               | Hybrid learning of field hierarchies               | Better field extraction accuracy vs heuristics                   | Adopt **field-aware tokenisation** (e.g., `[tcp.dst_port=445]`) for LLM input; avoids raw hex ambiguity.              |
+| **LLMcap (2024)**                                    | PCAP traces (network failures/anomalies)      | Self-supervised LLM anomaly detection              | Outperformed statistical anomaly baselines                       | LLMs can **detect unseen threats** without labels; useful for zero-day scenarios.                                     |
+| **TrafficLLM (2025)**                                | CIC-IDS2017, UNSW-NB15 + custom tokenisation  | Domain-specific tokenisation + fine-tuning         | Higher classification accuracy, more stable on imbalance         | Validates **tokenisation strategy** in `networkLLM`: combine field-tokens with byte-level features.                   |
+| **Arkko (ANRW 2024)**                                | Raw socket/packet traces                      | Direct LLM application to low-level traffic        | Struggled on raw bytes, better on diagnostic narratives          | Reinforces: preprocess packets → **structured text** before LLM; avoid raw binary input.                              |
+| **LLMPot (ICS Honeypot, 2024)**                      | ICS traffic (Modbus, DNP3)                    | LLM-generated honeypot responses                   | More realistic, intent-driven responses than rule-based          | LLMs capture **intent semantics**, useful for both IDS explanations and deception tools.                              |
+
+---
+
+## 🔑 Key Take-aways for **networkLLM**
+
+* **Must:** Build on **field-aware tokens** (Packet Field Tree + TrafficLLM).
+* **Should:** Add **RFC/RAG grounding** (PROSPER) for explainable alerts.
+* **May:** Use **LLM-guided fuzzing (ChatAFL)** to mine hard negatives and augment training.
+* **Can:** Leverage **LLMcap-style anomaly detection** for unlabeled traffic (zero-day hunting).
+* **Avoid:** Feeding raw packet bytes (Arkko) → always normalise first.
+* **Explore:** Extending intent detection into **active deception** (LLMPot-style honeypots).
+
+---
+
+
+
